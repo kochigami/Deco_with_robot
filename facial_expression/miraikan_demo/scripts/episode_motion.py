@@ -11,6 +11,7 @@ import json
 from naoqi import ALProxy
 import time
 import re
+import almath
 
 class Talk(object):
     def __init__(self, pepper_ip):
@@ -41,7 +42,11 @@ class Talk(object):
         #set init posture 
         # self.pos.goToPosture("StandInit", 1.0)
         self.set_init_posture()
-        
+
+        # open hands
+        self.mo.openHand('LHand')
+        self.mo.openHand('RHand')
+
         #set init speech setting
         self.tts.setLanguage("Japanese")
         self.tts.setParameter("pitch", 1.3)
@@ -60,6 +65,43 @@ class Talk(object):
         # angles = talk.mo.getAngles("Body", False)
         init_body_angles = [0.0, -2.802596928649634e-45, 1.5596766471862793, 0.14272688329219818, -1.228257656097412, -0.5225345492362976, -0.000497947505209595, 0.6000000238418579, 3.648194280003736e-08, -0.040683578699827194, -0.010746408253908157, 1.5596766471862793, -0.14272694289684296, 1.228257656097412, 0.5225345492362976, 0.0004979457589797676, 0.6000000238418579, 0.0, 0.0, 0.0]
         self.mo.setAngles("Body", init_body_angles, 0.1)
+
+    def greeting(self):
+        reset_pose = [0.0, 0.0,
+                      85.0, 10.0, -70.0, -20.0, -40.0, 0.0,
+                      2.0, -2.0, -5.0,
+                      85.0, -10.0, 70.0, 20.0, 40.0, 0.0,
+                      0.0, 0.0, 0.0]
+        reset_pose = [n*almath.TO_RAD for n in reset_pose]
+
+        pose1 = [0.0, 0.0,
+                 0.0, 10.0, -100.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 100.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose1 = [n*almath.TO_RAD for n in pose1]
+
+        pose2 = [0.0, 5.0,
+                 0.0, 10.0, -110.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 110.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose2 = [n*almath.TO_RAD for n in pose2]
+
+        pose3 = [0.0, 5.0,
+                 0.0, 10.0, -110.0, -70.0, 60.0, 0.0,
+                 2.0, -2.0, -5.0,
+                 0.0, -10.0, 110.0, 70.0, -60.0, 0.0,
+                 0.0, 0.0, 0.0]
+        pose3 = [n*almath.TO_RAD for n in pose3]
+
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose2, 1.0, True)
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose2, 1.0, True)
+        self.mo.angleInterpolation("Body", pose1, 1.0, True)
+        self.mo.angleInterpolation("Body", pose3, 1.0, True)
+        self.mo.angleInterpolation("Body", reset_pose, 3.0, True)
 
     def episode_11(self):
 
