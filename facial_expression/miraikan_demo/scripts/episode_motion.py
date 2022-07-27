@@ -12,7 +12,6 @@ from naoqi import ALProxy
 import time
 import re
 import almath
-import random
 
 class Talk(object):
     def __init__(self, pepper_ip):
